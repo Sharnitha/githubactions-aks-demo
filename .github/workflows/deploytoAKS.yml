@@ -30,7 +30,7 @@ jobs:
         run: dotnet build -c release
       - name: Dotnet publish
         # run: dotnet publish -c release
-        run:  dotnet publish -c release -o /app/publish
+        run:  dotnet publish -c release -o app/publish
           
   # UploadArtifacts:
   #   runs-on: ubuntu-latest
