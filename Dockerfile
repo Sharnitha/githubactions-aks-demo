@@ -1,7 +1,7 @@
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
 WORKDIR /app
 EXPOSE 80
-COPY /app/publish .
+COPY app/publish .
 ENTRYPOINT ["dotnet", "aks-ga-demo.dll"]
 # FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS base
 # WORKDIR /app
