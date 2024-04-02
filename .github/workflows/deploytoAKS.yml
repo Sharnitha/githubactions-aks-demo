@@ -28,6 +28,12 @@ jobs:
         run: dotnet build -c release
       - name: Dotnet restore
         run:  dotnet publish -c release -o /app/publish
+      - name: Build with Maven
+        run: |
+          cd /app/publish
+          ls
+          echo "dir path"
+          pwd
              
   # UploadArtifacts:
   #   runs-on: ubuntu-latest
