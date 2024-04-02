@@ -21,33 +21,29 @@ jobs:
   Restoring_Dependencies:
     runs-on: ubuntu-latest
     needs: Install_Dotnet
-    run: dotnet restore
-          
-  Dotnet_Build:
-    runs-on: ubuntu-latest
-    needs: Restoring_Dependencies
-    run: dotnet build -c release
-
-  Publish_Build:
-    runs-on: ubuntu-latest
-    needs: Dotnet_Build
-    run: dotnet publish -c release
-    
-  UploadArtifacts:
-    runs-on: ubuntu-latest
-    needs: Publish_Build
     steps:
-      - name: UploadArtifact
-        uses: actions/upload-artifact@v4.3.1
-        with:
-          name: dotnetdll
-          path: bin/release/netcoreapp3.1/publish/aks-ga-demo.dll
+      - name: Dotnet restore
+        run: dotnet restore
+      - name: Dotnet restore
+        run: dotnet build -c release
+      - name: Dotnet restore
+        run:  dotnet publish -c release -o /app/publish
+             
+  # UploadArtifacts:
+  #   runs-on: ubuntu-latest
+  #   needs: Publish_Build
+  #   steps:
+  #     - name: UploadArtifact
+  #       uses: actions/upload-artifact@v4.3.1
+  #       with:
+  #         name: dotnetdll
+  #         path: bin/release/netcoreapp3.1/publish/aks-ga-demo.dll
 
     #<sonarqube>
 
   Docker_Login:
     runs-on: ubuntu-latest
-    needs: UploadArtifacts
+    needs: Restoring_Dependencies
     steps:
       - name: Docker Login to ACR
         uses: docker/login-action@v3.1.0
