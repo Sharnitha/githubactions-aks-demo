@@ -81,6 +81,7 @@ jobs:
 
   Docker_Push:
     runs-on: ubuntu-latest
+    needs: Trivyscan 
     steps:
       - name: Docker build using Dockerfile
         run: docker push githubcipractice.azurecr.io/demoenv:${{ github.run_id }}  
