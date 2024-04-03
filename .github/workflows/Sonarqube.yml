@@ -1,0 +1,19 @@
+name: Sonarqube
+
+on:
+  workflow_dispatch
+
+jobs:
+  Sonarqube:
+    runs-on: ubuntu-latest
+    steps:
+       - name: Checkout
+         uses: actions/checkout@v4.1.2
+       - name: Setup Java JDK
+         uses: actions/setup-java@v4.2.1
+         with:
+          java-version: 11
+       - name: jdk version check
+         run: java --version
+         
+ 
