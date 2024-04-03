@@ -22,7 +22,7 @@ jobs:
             # chmod 777 /var/lib/dpkg/lock-frontend
             # mv sonarqube-9.9.0.65466 sonarqube
             # chmod 777 /var/lib/dpkg/lock-frontend
-            groupadd sonar
+            sudo groupadd sonar
             sudo useradd -c "user to run SonarQube" -d sonarqube-9.9.0.65466 -g sonar sonar
             sudo chown sonar:sonar sonarqube-9.9.0.65466 -R
        - name: Increase system Limits
