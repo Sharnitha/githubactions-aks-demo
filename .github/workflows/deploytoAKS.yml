@@ -72,9 +72,14 @@ jobs:
       - name: Docker build using Dockerfile
         run: |
           gh run download ${{ github.run_id }}
-          ls -a
           docker build -t githubcipractice.azurecr.io/demoenv:${{ github.run_id }} .
-          docker images
+      - name: Aqua Security Trivy
+        uses: aquasecurity/trivy-action@0.18.0
+        with:   
+          exit-code: 0
+          severity: MEDIUM,HIGH,CRITICAL
+          format: table
+          image-ref: githubcipractice.azurecr.io/demoenv:${{ github.run_id }}
         
   # Trivyscan:
   # # if: github.ref == github.event.pull_request.head.ref || github.ref == 'refs/heads/main'
