@@ -9,6 +9,8 @@ jobs:
     env:
       DOTNET_INSTALL_DIR: "/home/Sharni/actions-runner/_work/githubactions-aks-demo/githubactions-aks-demo/.dotnet"
     steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
     - name: Setup .NET Core SDK
       uses: actions/setup-dotnet@v4
       with:
@@ -18,8 +20,8 @@ jobs:
       runs-on: self-hosted
       needs: Dotnet_Install
       steps:
-        # - name: Checkout code
-        #   uses: actions/checkout@v4
+        - name: Checkout code
+          uses: actions/checkout@v4
         - name: Checking Dotnet version
           run: dotnet --version
         - name: Install Dependency
