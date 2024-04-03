@@ -23,7 +23,8 @@ jobs:
       uses: actions/cache@v4.0.2
       with:
         path: ~/.dotnet
-        key: dotnet-${{ runner.os }}-${{ secrets.DOTNET_VERSION }}-${{ hashfiles('*.csproj') }}
+        key: dotnet-${{ runner.os }}-${{ secrets.DOTNET_VERSION }}  
+        #-${{ hashfiles('*.csproj') }}
          
   Dotnet_Dependency:
     runs-on: ubuntu-latest
