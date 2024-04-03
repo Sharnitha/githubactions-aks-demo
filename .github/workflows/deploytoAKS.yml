@@ -80,6 +80,8 @@ jobs:
           severity: MEDIUM,HIGH,CRITICAL
           format: table
           image-ref: githubcipractice.azurecr.io/demoenv:${{ github.run_id }}
+      - name: Docker build using Dockerfile
+        run: docker push githubcipractice.azurecr.io/demoenv:${{ github.run_id }}  
         
   # Trivyscan:
   # # if: github.ref == github.event.pull_request.head.ref || github.ref == 'refs/heads/main'
