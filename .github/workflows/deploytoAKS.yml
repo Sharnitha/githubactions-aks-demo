@@ -17,8 +17,13 @@ jobs:
     steps:
     - name: before removing dotnet sdk version
       run: |
-        cd /usr/share/dotnet/
+        cd /usr/share/dotnet/sdk/
         ls
+    - name: before removing dotnet version
+      run: |
+        cd /usr/share/dotnet/dotnet/
+        ls
+        cd /usr/share/dotnet/dotnet/dotnet --version
     - name: Remove Previous Dotnet Version
       run : |
         cd /usr/share/dotnet/
