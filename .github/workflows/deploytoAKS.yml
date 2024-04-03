@@ -8,6 +8,8 @@ on:
    #  - master
     # paths:
     # - Controllers/**
+env:
+    GH_TOKEN: ${{secrets.GITHUB_TOKEN }}
 
 jobs:
   Install_Dotnet:
