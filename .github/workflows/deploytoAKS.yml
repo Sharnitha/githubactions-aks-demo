@@ -74,37 +74,37 @@ jobs:
 
   #   #<sonarqube>
 
-  # Docker_Login:
-  #   runs-on: ubuntu-latest
-  #   needs: Restoring_Dependencies
-  #   steps:
-  #     - name: Docker Login to ACR
-  #       uses: docker/login-action@v3.1.0
-  #       with:
-  #         registry: githubcipractice.azurecr.io
-  #         username: ${{secrets.ACR_ID}} #Clientid
-  #         password: ${{secrets.ACR_PASS}} #Clientsecret
-  #         ecr: false
+  Docker_Login:
+    runs-on: ubuntu-latest
+    needs: Restoring_Dependencies
+    steps:
+      - name: Docker Login to ACR
+        uses: docker/login-action@v3.1.0
+        with:
+          registry: githubcipractice.azurecr.io
+          username: ${{secrets.ACR_ID}} #Clientid
+          password: ${{secrets.ACR_PASS}} #Clientsecret
+          ecr: false
 
-  # Docker_Build:
-  #   runs-on: ubuntu-latest
-  #   needs: Docker_Login
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v4
-  #     - name: Docker build using Dockerfile
-  #       run: |
-  #         gh run download ${{ github.run_id }}
-  #         docker build -t githubcipractice.azurecr.io/demoenv:${{ github.run_id }} .
-  #     - name: Aqua Security Trivy
-  #       uses: aquasecurity/trivy-action@0.18.0
-  #       with:   
-  #         exit-code: 0
-  #         severity: MEDIUM,HIGH,CRITICAL
-  #         format: table
-  #         image-ref: githubcipractice.azurecr.io/demoenv:${{ github.run_id }}
-  #     - name: Docker build using Dockerfile
-  #       run: docker push githubcipractice.azurecr.io/demoenv:${{ github.run_id }}  
+  Docker_Build:
+    runs-on: ubuntu-latest
+    needs: Docker_Login
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Docker build using Dockerfile
+        run: |
+          gh run download ${{ github.run_id }}
+          docker build -t githubcipractice.azurecr.io/demoenv:${{ github.run_id }} .
+      - name: Aqua Security Trivy
+        uses: aquasecurity/trivy-action@0.18.0
+        with:   
+          exit-code: 0
+          severity: MEDIUM,HIGH,CRITICAL
+          format: table
+          image-ref: githubcipractice.azurecr.io/demoenv:${{ github.run_id }}
+      - name: Docker build using Dockerfile
+        run: docker push githubcipractice.azurecr.io/demoenv:${{ github.run_id }}  
         
   # # Trivyscan:
   # # # if: github.ref == github.event.pull_request.head.ref || github.ref == 'refs/heads/main'
