@@ -6,14 +6,13 @@ on:
 jobs:
   Dotnet_Install:
     runs-on: self-hosted  
+    env:
+      DOTNET_INSTALL_DIR: "./.dotnet"
     steps:
     - name: Setup .NET Core SDK
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: ${{secrets.DOTNET_VERSION}}
-        run: sudo chmod -R 744 /usr/share/dotnet
-    # - name: Changing permission for /usr/share/dotnet location
-    #   run: sudo chmod -R 744 /usr/share/dotnet
       
   Dotnet_Restore:
       runs-on: self-hosted
