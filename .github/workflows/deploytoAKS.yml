@@ -21,9 +21,7 @@ jobs:
         ls
     - name: before removing dotnet version
       run: |
-        cd /usr/share/dotnet/dotnet/
-        ls
-        cd /usr/share/dotnet/dotnet/dotnet --version
+        cd /usr/share/dotnet/dotnet --version
     - name: Remove Previous Dotnet Version
       run : |
         cd /usr/share/dotnet/
