@@ -35,7 +35,7 @@ jobs:
         uses: actions/upload-artifact@v4.3.1
         with:
           name: dotnetdll
-          path: bin/release/netcoreapp3.1/publish/aks-ga-demo.dll  --> check this path present (ls)
+          path: bin/release/netcoreapp3.1/publish/aks-ga-demo.dll
           
   # UploadArtifacts:
   #   runs-on: ubuntu-latest
