@@ -7,7 +7,7 @@ jobs:
   Dotnet_Install:
     runs-on: self-hosted  
     env:
-      DOTNET_INSTALL_DIR: "./.dotnet"
+      DOTNET_INSTALL_DIR: "/home/Sharni/actions-runner/_work/githubactions-aks-demo/githubactions-aks-demo/.dotnet"
     steps:
     - name: Setup .NET Core SDK
       uses: actions/setup-dotnet@v4
