@@ -18,8 +18,8 @@ jobs:
       runs-on: self-hosted
       needs: Dotnet_Install
       steps:
-        - name: Checkout code
-          uses: actions/checkout@v4
+        # - name: Checkout code
+        #   uses: actions/checkout@v4
         - name: Checking Dotnet version
           run: dotnet --version
         - name: Install Dependency
