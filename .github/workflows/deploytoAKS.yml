@@ -19,19 +19,16 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: ${{secrets.DOTNET_VERSION}}
-      
-    - name: Add .NET Core 3.1.x to PATH
-      run: | 
-        cat .bashrc
-    #     echo "export PATH=\"$HOME/.dotnet:$PATH\"" >> $HOME/.bashrc 
-    #     source $HOME/.bashrc
-    # - name: dotnet version
-    #   run: dotnet --version
-   
-    # - name: Checkout code
-    #   uses: actions/checkout@v4
-    # - name: Dotnet version
-    #   run: dotnet --version
+        
+    - name: Dotnet version
+      run: |
+        cd /usr/share/dotnet/sdk/3.1.426/
+        ls
+ 
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Dotnet version
+      run: /usr/share/dotnet/sdk/3.1.426/dotnet --version
     # - name: Dotnet restore
     #   run: dotnet restore
     # - name: Dotnet build
