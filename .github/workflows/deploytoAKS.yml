@@ -19,8 +19,8 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: ${{secrets.DOTNET_VERSION}}
-    - name: Checkout code
-      uses: actions/checkout@v4
+    # - name: Checkout code
+    #   uses: actions/checkout@v4
     - name: Dotnet version
       run: dotnet --version
     # - name: Dotnet restore
