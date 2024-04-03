@@ -15,21 +15,31 @@ jobs:
   Install_Dotnet:
     runs-on: ubuntu-latest
     steps:
-    - name: remove previous dotnet version
+    - name: Remove Previous Dotnet Version
       run : |
         cd /usr/share/dotnet/
         rm -rf *
+    - name: Checkout code
+      uses: actions/checkout@v4
     - name: Setup .NET Core SDK
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: ${{secrets.DOTNET_VERSION}}
- 
-    - name: Dotnet version
+        dotnet-version: ${{secrets.DOTNET_VERSION}}    
+    - name: Listing Dotnet version
       run: dotnet --version
-    # - name: Dotnet restore
-    #   run: dotnet restore
-    # - name: Dotnet build
-    #   run: dotnet build -c release
+    - name: Restoring Dependencies
+      run: dotnet restore
+    - name: Building Dotnet
+      run: dotnet build -c release
+    - name: Dotnet Publish
+      run: dotnet publish -c release
+      # run:  dotnet publish -c release -o app/publish
+    - name: UploadArtifact
+      uses: actions/upload-artifact@v4.3.1
+      with:
+        name: dotnetdll
+        path: bin/release/netcoreapp3.1/publish/aks-ga-demo.dll
+    
 
     # - name: test
     #   run: | 
