@@ -1,0 +1,45 @@
+name: Self-Hosted CI
+
+on:
+  workflow_dispatch:
+
+jobs:
+  Dotnet_Install:
+    runs-on: self-hosted  
+    steps:
+    - name: Setup .NET Core SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{secrets.DOTNET_VERSION}}
+  Dotnet_Restore:
+      runs-on: self-hosted
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+        - name: Checking Dotnet version
+          run: dotnet --version
+        - name: Install Dependency
+          run: dotnet restore
+  Dotnet_Build:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Dotnet build
+        run: dotnet build -c release
+  Dotnet_Publish:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Dotnet build
+        run: dotnet publish -c release -o /app/publish
+  Listing_Publish_Location:
+    runs-on: self-hosted
+    steps:
+      - name: Listing files
+        run: |
+          cd /app/publish
+          ls -a
+          
+          
