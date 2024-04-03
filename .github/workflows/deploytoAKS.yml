@@ -9,7 +9,7 @@ on:
     # paths:
     # - Controllers/**
 env:
-    GH_TOKEN: ${{secrets.GITHUB_TOKEN }}
+    GH_TOKEN: ${{secrets.ARTIFACT_TOKEN }}
 
 jobs:
   Install_Dotnet:
