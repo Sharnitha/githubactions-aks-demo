@@ -1,4 +1,4 @@
-  name: Azure Kubernetes set context
+  name: CD file
   
   on: 
      workflow_dispatch:
