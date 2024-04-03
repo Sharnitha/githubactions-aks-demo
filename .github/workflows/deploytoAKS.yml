@@ -30,7 +30,7 @@ jobs:
 
     - name: test
       run: | 
-       ls /usr/share/dotnet
+       ls /usr/share/dotnet/Sdk/
     - name: Cache
       uses: actions/cache@v4.0.2
       with:
