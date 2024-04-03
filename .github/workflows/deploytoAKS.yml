@@ -15,6 +15,10 @@ jobs:
   Install_Dotnet:
     runs-on: ubuntu-latest
     steps:
+    - name: before removing dotnet sdk version
+      run: |
+        cd /usr/share/dotnet/
+        ls
     - name: Remove Previous Dotnet Version
       run : |
         cd /usr/share/dotnet/
