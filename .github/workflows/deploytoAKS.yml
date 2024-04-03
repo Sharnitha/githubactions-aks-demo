@@ -64,10 +64,8 @@ jobs:
         uses: actions/checkout@v4
       - name: Docker build using Dockerfile
         run: |
-         pwd
-         ls -a
           # gh run download ${{ github.run_id }}
-          # docker build -t githubcipractice.azurecr.io/demoenv:${{ github.run_id }} .
+          docker build -t githubcipractice.azurecr.io/demoenv:${{ github.run_id }} .
         
   Trivyscan:
   # if: github.ref == github.event.pull_request.head.ref || github.ref == 'refs/heads/main'
