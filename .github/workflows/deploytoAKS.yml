@@ -19,12 +19,15 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: ${{secrets.DOTNET_VERSION}}
-    - name: Cache
-      uses: actions/cache@v4.0.2
-      with:
-        path: ~/.dotnet
-        key: dotnet-${{ runner.os }}-${{ secrets.DOTNET_VERSION }}  
-        #-${{ hashfiles('*.csproj') }}
+    - name: listing file
+      run: ls ~/.dotnet
+    - name: where dotnet
+      run: which dotnet
+    # - name: Cache
+    #   uses: actions/cache@v4.0.2
+    #   with:
+    #     path: ~/.dotnet
+    #     key: dotnet-${{ runner.os }}-${{ secrets.DOTNET_VERSION }}  
          
   Dotnet_Dependency:
     runs-on: ubuntu-latest
