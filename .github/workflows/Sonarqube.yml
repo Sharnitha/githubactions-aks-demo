@@ -17,14 +17,14 @@ jobs:
        - name: Install Sonarqube
          run: |
             wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-9.9.0.65466.zip
-            apt install unzip
+            # apt install unzip
             unzip sonarqube-9.9.0.65466.zip
-            chmod 777 /var/lib/dpkg/lock-frontend
-            mv sonarqube-9.9.0.65466 sonarqube
-            chmod 777 /var/lib/dpkg/lock-frontend
-            groupadd sonar
-            useradd -c "user to run SonarQube" -d sonarqube -g sonar sonar
-            chown sonar:sonar sonarqube -R
+            # chmod 777 /var/lib/dpkg/lock-frontend
+            # mv sonarqube-9.9.0.65466 sonarqube
+            # chmod 777 /var/lib/dpkg/lock-frontend
+            # groupadd sonar
+            # useradd -c "user to run SonarQube" -d sonarqube -g sonar sonar
+            # chown sonar:sonar sonarqube -R
        - name: Increase system Limits
          run: |
             sh -c "echo 'sonarqube   -   nofile   65536' >> /etc/security/limits.conf"
