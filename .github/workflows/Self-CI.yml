@@ -6,8 +6,6 @@ on:
 jobs:
   Dotnet_Install:
     runs-on: self-hosted  
-    env:
-      DOTNET_INSTALL_DIR: "/home/Sharni/actions-runner/_work/githubactions-aks-demo/githubactions-aks-demo/.dotnet"
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -16,16 +14,16 @@ jobs:
       with:
         dotnet-version: ${{secrets.DOTNET_VERSION}}
       
-  Dotnet_Restore:
-      runs-on: self-hosted
-      needs: Dotnet_Install
-      steps:
-        - name: Checkout code
-          uses: actions/checkout@v4
-        - name: Checking Dotnet version
-          run: dotnet --version
-        - name: Install Dependency
-          run: dotnet restore
+  # Dotnet_Restore:
+  #     runs-on: self-hosted
+  #     needs: Dotnet_Install
+  #     steps:
+  #       - name: Checkout code
+  #         uses: actions/checkout@v4
+  #       - name: Checking Dotnet version
+  #         run: dotnet --version
+  #       - name: Install Dependency
+  #         run: dotnet restore
   # Dotnet_Build:
   #   runs-on: self-hosted
   #   steps:
