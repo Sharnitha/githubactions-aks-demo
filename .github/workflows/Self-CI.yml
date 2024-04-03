@@ -11,6 +11,9 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: ${{secrets.DOTNET_VERSION}}
+    - name: Changing permission for /usr/share/dotnet location
+      run: sudo chmod -R 744 /usr/share/dotnet
+      
   Dotnet_Restore:
       runs-on: self-hosted
       steps:
