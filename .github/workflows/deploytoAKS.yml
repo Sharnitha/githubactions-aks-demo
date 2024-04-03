@@ -15,20 +15,17 @@ jobs:
   Install_Dotnet:
     runs-on: ubuntu-latest
     steps:
+    - name: remove previous dotnet version
+      run : |
+        cd /usr/share/dotnet/
+        rm -rf *
     - name: Setup .NET Core SDK
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: ${{secrets.DOTNET_VERSION}}
-        
-    - name: Dotnet version
-      run: |
-        cd /usr/share/dotnet/sdk/3.1.426/
-        ls
  
-    - name: Checkout code
-      uses: actions/checkout@v4
     - name: Dotnet version
-      run: /usr/share/dotnet/sdk/3.1.426/dotnet --version
+      run: dotnet --version
     # - name: Dotnet restore
     #   run: dotnet restore
     # - name: Dotnet build
