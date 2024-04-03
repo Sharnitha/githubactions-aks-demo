@@ -1,9 +1,8 @@
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
-WORKDIR /app
+ARG artifact=dotnetdll/aks-ga-demo.dll
+COPY ${artifact} demo.dll
 EXPOSE 80
-RUN dotnet publish "aks-ga-demo.csproj" -c Release -o app/publish
-COPY app/publish .
-ENTRYPOINT ["dotnet", "aks-ga-demo.dll"]
+ENTRYPOINT ["dotnet", "demo.dll"]
 # FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS base
 # WORKDIR /app
 # EXPOSE 80
