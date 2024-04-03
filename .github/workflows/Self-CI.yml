@@ -16,6 +16,7 @@ jobs:
       
   Dotnet_Restore:
       runs-on: self-hosted
+      needs: Dotnet_Install
       steps:
         - name: Checkout code
           uses: actions/checkout@v4
