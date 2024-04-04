@@ -1,8 +1,13 @@
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
-ARG artifact=dotnet_artifacts/aks-ga-demo.dll
-COPY ${artifact} aks-ga-demo.dll
+COPY /home/Sharni/demo/publish/aks-ga-demo.dll .
 EXPOSE 80
 ENTRYPOINT ["dotnet", "aks-ga-demo.dll"]
+
+# FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
+# ARG artifact=dotnet_artifacts/aks-ga-demo.dll
+# COPY ${artifact} aks-ga-demo.dll
+# EXPOSE 80
+# ENTRYPOINT ["dotnet", "aks-ga-demo.dll"]
 # FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS base
 # WORKDIR /app
 # EXPOSE 80
