@@ -6,7 +6,7 @@ on:
 env: 
   # DOTNET_VERSION: '3.1.426'
   DOTNET_INSTALL_DIR: "./.dotnet"
-  # GH_TOKEN: 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
+  GH_TOKEN: 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
 
 jobs:
   Dotnet_Build:
