@@ -106,39 +106,3 @@ jobs:
      # delete all all stopped containers, all networks not used by at least one container, all images without at least one container associated to them, all build cache
        # docker image prune -a  it remove only all images without at least one container associated to them
       
-  # Dotnet_Restore:
-  #     runs-on: self-hosted
-  #     # if: contains(needs.job_1.outputs.run_next, 'true')
-  #     needs: Dotnet_Build
-  #     steps:
-  #       - name: Checkout code
-  #         uses: actions/checkout@v4
-  #       - name: Checking Dotnet version
-  #         run: dotnet --version
-  #       - name: Install Dependency
-  #         run: dotnet restore
-  #         env:
-  #             NEW_VERSION: ${{ steps.job1.outputs.new_version }}
-  # Dotnet_Build:
-  #   runs-on: self-hosted
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v4
-  #     - name: Dotnet build
-  #       run: dotnet build -c release
-  # Dotnet_Publish:
-  #   runs-on: self-hosted
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v4
-  #     - name: Dotnet build
-  #       run: dotnet publish -c release -o /app/publish
-  # Listing_Publish_Location:
-  #   runs-on: self-hosted
-  #   steps:
-  #     - name: Listing files
-  #       run: |
-  #         cd /app/publish
-  #         ls -a
-          
-          
