@@ -3,6 +3,9 @@ name: Self-Hosted CI
 on:
   workflow_dispatch:
 
+env: 
+  DOTNET_VERSION: '3.1.426'
+
 jobs:
   Dotnet_Install:
     runs-on: self-hosted  
@@ -12,18 +15,18 @@ jobs:
     - name: Setup .NET Core SDK
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: ${{secrets.DOTNET_VERSION}}
+        dotnet-version: ${{ env.DOTNET_VERSION }}
       
-  # Dotnet_Restore:
-  #     runs-on: self-hosted
-  #     needs: Dotnet_Install
-  #     steps:
-  #       - name: Checkout code
-  #         uses: actions/checkout@v4
-  #       - name: Checking Dotnet version
-  #         run: dotnet --version
-  #       - name: Install Dependency
-  #         run: dotnet restore
+  Dotnet_Restore:
+      runs-on: self-hosted
+      needs: Dotnet_Install
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+        - name: Checking Dotnet version
+          run: dotnet --version
+        - name: Install Dependency
+          run: dotnet restore
   # Dotnet_Build:
   #   runs-on: self-hosted
   #   steps:
