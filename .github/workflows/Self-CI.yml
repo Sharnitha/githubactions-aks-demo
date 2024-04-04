@@ -78,6 +78,7 @@ jobs:
     steps:
       - name: Aqua Trivy scan report
         run: |
+          pwd
           trivy image -f json -o trivyfijs.json githubcipractice.azurecr.io/demoenv:${{ github.run_id }}
           trivy image -f table -o trivyresults.txt githubcipractice.azurecr.io/demoenv:${{ github.run_id }}
 
