@@ -10,6 +10,8 @@ env:
 jobs:
   Dotnet_Build:
     runs-on: self-hosted  
+    # outputs:
+    #   run_next: ${{ steps.job1.outputs.run_next }}
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -17,31 +19,35 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: ${{ secrets.DOTNET_VERSION }}
+      id: job1
   
-    - name: Checking Dotnet version
-      run: dotnet --version
-    - name: Install Dependency
-      run: dotnet restore
-    - name: Dotnet build
-      run: dotnet build -c release
-    - name: Dotnet publish
-      run: dotnet publish -c release
-    - name: UploadArtifact
-      uses: actions/upload-artifact@v4.3.1
-      with:
-        name: dotnet_artifacts
-        path: bin/release/netcoreapp3.1/publish/aks-ga-demo.dll
+    # - name: Checking Dotnet version
+    #   run: dotnet --version
+    # - name: Install Dependency
+    #   run: dotnet restore
+    # - name: Dotnet build
+    #   run: dotnet build -c release
+    # - name: Dotnet publish
+    #   run: dotnet publish -c release
+    # - name: UploadArtifact
+    #   uses: actions/upload-artifact@v4.3.1
+    #   with:
+    #     name: dotnet_artifacts
+    #     path: bin/release/netcoreapp3.1/publish/aks-ga-demo.dll
       
-  # Dotnet_Restore:
-  #     runs-on: self-hosted
-  #     needs: Dotnet_Install
-  #     steps:
-  #       - name: Checkout code
-  #         uses: actions/checkout@v4
-  #       - name: Checking Dotnet version
-  #         run: dotnet --version
-  #       - name: Install Dependency
-  #         run: dotnet restore
+  Dotnet_Restore:
+      runs-on: self-hosted
+      # if: contains(needs.job_1.outputs.run_next, 'true')
+      needs: Dotnet_Build
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+        - name: Checking Dotnet version
+          run: dotnet --version
+        - name: Install Dependency
+          run: dotnet restore
+          env:
+              NEW_VERSION: ${{ steps.job1.outputs.new_version }}
   # Dotnet_Build:
   #   runs-on: self-hosted
   #   steps:
