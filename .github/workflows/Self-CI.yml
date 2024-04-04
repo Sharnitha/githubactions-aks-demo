@@ -5,7 +5,7 @@ on:
 
 env: 
   # DOTNET_VERSION: '3.1.426'
-  DOTNET_INSTALL_DIR: "./.dotnet"
+  DOTNET_INSTALL_DIR: "./.dotnet" # this is used in dotnet_build job.
   # GH_TOKEN: {{ }} # if you not provide this cred means, in machine do gh auth login and authenticate first using pat.
 
 jobs:
@@ -58,6 +58,11 @@ jobs:
           docker --version
           gh run download ${{ github.run_id }}
           docker build -t githubcipractice.azurecr.io/demoenv:${{ github.run_id }} .
+
+  Aqua_Trivy:
+    runs-on: self-hosted
+    needs: Docker_Build
+    steps:
       - name: Aqua Security Trivy
         uses: aquasecurity/trivy-action@0.18.0
         with:   
@@ -65,8 +70,13 @@ jobs:
           severity: MEDIUM,HIGH,CRITICAL
           format: table
           image-ref: githubcipractice.azurecr.io/demoenv:${{ github.run_id }}
-      - name: Docker build using Dockerfile
-        run: docker push githubcipractice.azurecr.io/demoenv:${{ github.run_id }}  
+
+  Docker_push:
+    runs-on: self-hosted
+    needs: Aqua_Trivy
+    steps:
+    - name: Docker build using Dockerfile
+      run: docker push githubcipractice.azurecr.io/demoenv:${{ github.run_id }}  
         
       
   # Dotnet_Restore:
