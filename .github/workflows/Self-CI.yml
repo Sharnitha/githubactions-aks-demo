@@ -70,7 +70,7 @@ jobs:
           exit-code: 0
           severity: MEDIUM,HIGH,CRITICAL
           format: table
-          image-ref: githubcipractice.azurecr.io/demoenv:${{ github.run_id }}
+          image-ref: githubcipractice.azurecr.io/demoenv:${{ github.run_id }} | tee trivy_scan_results.txt
 
   Docker_push:
     runs-on: self-hosted
