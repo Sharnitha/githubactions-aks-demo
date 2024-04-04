@@ -28,13 +28,13 @@ jobs:
     - name: Dotnet build
       run: dotnet build -c release
     - name: Dotnet publish
-      # run: dotnet publish -c release
-      run: dotnet publish -c release -o demo/publish
-    # - name: UploadArtifact
-    #   uses: actions/upload-artifact@v4.3.1
-    #   with:
-    #     name: dotnet_artifacts
-    #     path: bin/release/netcoreapp3.1/publish/aks-ga-demo.dll
+      run: dotnet publish -c release
+      # run: dotnet publish -c release -o demo/publish --> it is not worked because this demo/publish path is vanish in docker build job.
+    - name: UploadArtifact
+      uses: actions/upload-artifact@v4.3.1
+      with:
+        name: dotnet_artifacts
+        path: bin/release/netcoreapp3.1/publish/aks-ga-demo.dll
         
   Docker_Login:
     runs-on: self-hosted
@@ -57,7 +57,7 @@ jobs:
       - name: Docker build using Dockerfile
         run: |
           docker --version
-          # gh run download ${{ github.run_id }}
+          gh run download ${{ github.run_id }}
           docker build -t githubcipractice.azurecr.io/demoenv:${{ github.run_id }} .
 
   Aqua_Trivy:
@@ -81,7 +81,9 @@ jobs:
         docker login githubcipractice.azurecr.io -u ${{secrets.ACR_ID}} -p ${{secrets.ACR_PASS}}
         docker push githubcipractice.azurecr.io/demoenv:${{ github.run_id }}  
         docker history githubcipractice.azurecr.io/demoenv:${{ github.run_id }}
-        
+     # docker system prune -a 
+     # delete all all stopped containers, all networks not used by at least one container, all images without at least one container associated to them, all build cache
+       # docker image prune -a  it remove only all images without at least one container associated to them
       
   # Dotnet_Restore:
   #     runs-on: self-hosted
