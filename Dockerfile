@@ -1,13 +1,16 @@
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
-COPY /home/Sharni/actions-runner/_work/githubactions-aks-demo/githubactions-aks-demo/demo/publish/ .
+ARG artifact=dotnet_artifacts/aks-ga-demo.dll
+COPY ${artifact} aks-ga-demo.dll
 EXPOSE 80
 ENTRYPOINT ["dotnet", "aks-ga-demo.dll"]
 
+# used when i used docker publish -c release demo/publish . here where this dockerfile execute this demo/publish path is not created.
 # FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
-# ARG artifact=dotnet_artifacts/aks-ga-demo.dll
-# COPY ${artifact} aks-ga-demo.dll
+# COPY /home/Sharni/actions-runner/_work/githubactions-aks-demo/githubactions-aks-demo/demo/publish/ .
 # EXPOSE 80
 # ENTRYPOINT ["dotnet", "aks-ga-demo.dll"]
+
+
 # FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS base
 # WORKDIR /app
 # EXPOSE 80
