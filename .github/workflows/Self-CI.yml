@@ -19,35 +19,67 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: ${{ secrets.DOTNET_VERSION }}
-      id: job1
   
-    # - name: Checking Dotnet version
-    #   run: dotnet --version
-    # - name: Install Dependency
-    #   run: dotnet restore
-    # - name: Dotnet build
-    #   run: dotnet build -c release
-    # - name: Dotnet publish
-    #   run: dotnet publish -c release
-    # - name: UploadArtifact
-    #   uses: actions/upload-artifact@v4.3.1
-    #   with:
-    #     name: dotnet_artifacts
-    #     path: bin/release/netcoreapp3.1/publish/aks-ga-demo.dll
+    - name: Checking Dotnet version
+      run: dotnet --version
+    - name: Install Dependency
+      run: dotnet restore
+    - name: Dotnet build
+      run: dotnet build -c release
+    - name: Dotnet publish
+      run: dotnet publish -c release
+    - name: UploadArtifact
+      uses: actions/upload-artifact@v4.3.1
+      with:
+        name: dotnet_artifacts
+        path: bin/release/netcoreapp3.1/publish/aks-ga-demo.dll
+        
+  Docker_Login:
+    runs-on: self-hosted
+    needs: Dotnet_Build
+    steps:
+      - name: Docker Login to ACR
+        uses: docker/login-action@v3.1.0
+        with:
+          registry: githubcipractice.azurecr.io
+          username: ${{secrets.ACR_ID}} #Clientid
+          password: ${{secrets.ACR_PASS}} #Clientsecret
+          ecr: false
+
+  Docker_Build:
+    runs-on: self-hosted
+    needs: Docker_Login
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Docker build using Dockerfile
+        run: |
+          gh run download ${{ github.run_id }}
+          docker build -t githubcipractice.azurecr.io/demoenv:${{ github.run_id }} .
+      - name: Aqua Security Trivy
+        uses: aquasecurity/trivy-action@0.18.0
+        with:   
+          exit-code: 0
+          severity: MEDIUM,HIGH,CRITICAL
+          format: table
+          image-ref: githubcipractice.azurecr.io/demoenv:${{ github.run_id }}
+      - name: Docker build using Dockerfile
+        run: docker push githubcipractice.azurecr.io/demoenv:${{ github.run_id }}  
+        
       
-  Dotnet_Restore:
-      runs-on: self-hosted
-      # if: contains(needs.job_1.outputs.run_next, 'true')
-      needs: Dotnet_Build
-      steps:
-        - name: Checkout code
-          uses: actions/checkout@v4
-        - name: Checking Dotnet version
-          run: dotnet --version
-        - name: Install Dependency
-          run: dotnet restore
-          env:
-              NEW_VERSION: ${{ steps.job1.outputs.new_version }}
+  # Dotnet_Restore:
+  #     runs-on: self-hosted
+  #     # if: contains(needs.job_1.outputs.run_next, 'true')
+  #     needs: Dotnet_Build
+  #     steps:
+  #       - name: Checkout code
+  #         uses: actions/checkout@v4
+  #       - name: Checking Dotnet version
+  #         run: dotnet --version
+  #       - name: Install Dependency
+  #         run: dotnet restore
+  #         env:
+  #             NEW_VERSION: ${{ steps.job1.outputs.new_version }}
   # Dotnet_Build:
   #   runs-on: self-hosted
   #   steps:
