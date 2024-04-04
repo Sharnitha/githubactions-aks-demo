@@ -74,7 +74,7 @@ jobs:
           
   Aqua_Trivy_report:
     runs-on: self-hosted
-    needs: Docker_Build
+    needs: Aqua_Trivy
     steps:
       - name: Aqua Trivy scan report
         run: |
