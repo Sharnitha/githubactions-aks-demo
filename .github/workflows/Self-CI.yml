@@ -57,7 +57,7 @@ jobs:
       - name: Docker build using Dockerfile
         run: |
           docker --version
-          gh run download ${{ github.run_id }}
+          # gh run download ${{ github.run_id }}
           docker build -t githubcipractice.azurecr.io/demoenv:${{ github.run_id }} .
 
   Aqua_Trivy:
