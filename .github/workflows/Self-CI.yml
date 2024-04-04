@@ -28,12 +28,13 @@ jobs:
     - name: Dotnet build
       run: dotnet build -c release
     - name: Dotnet publish
-      run: dotnet publish -c release
-    - name: UploadArtifact
-      uses: actions/upload-artifact@v4.3.1
-      with:
-        name: dotnet_artifacts
-        path: bin/release/netcoreapp3.1/publish/aks-ga-demo.dll
+      # run: dotnet publish -c release
+      run: dotnet publish -c release -o demo/publish
+    # - name: UploadArtifact
+    #   uses: actions/upload-artifact@v4.3.1
+    #   with:
+    #     name: dotnet_artifacts
+    #     path: bin/release/netcoreapp3.1/publish/aks-ga-demo.dll
         
   Docker_Login:
     runs-on: self-hosted
