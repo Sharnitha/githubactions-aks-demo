@@ -16,7 +16,7 @@ jobs:
     - name: Setup .NET Core SDK
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: ${{ env.DOTNET_VERSION }}
+        dotnet-version: ${{ secrets.DOTNET_VERSION }}
   
     - name: Checking Dotnet version
       run: dotnet --version
