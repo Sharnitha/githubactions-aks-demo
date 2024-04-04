@@ -70,7 +70,16 @@ jobs:
           exit-code: 0
           severity: MEDIUM,HIGH,CRITICAL
           format: table
-          image-ref: githubcipractice.azurecr.io/demoenv:${{ github.run_id }} | tee trivy_scan_results.txt
+          image-ref: githubcipractice.azurecr.io/demoenv:${{ github.run_id }}
+          
+  Aqua_Trivy_report:
+    runs-on: self-hosted
+    needs: Docker_Build
+    steps:
+      - name: Aqua Trivy scan report
+        run: |
+          trivy image -f json -o trivyfijs.json githubcipractice.azurecr.io/demoenv:${{ github.run_id }}
+          trivy image -f table -o trivyresults.txt githubcipractice.azurecr.io/demoenv:${{ github.run_id }}
 
   Docker_push:
     runs-on: self-hosted
