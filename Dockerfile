@@ -1,5 +1,5 @@
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
-COPY /home/Sharni/demo/publish/aks-ga-demo.dll .
+COPY /home/Sharni/actions-runner/_work/githubactions-aks-demo/githubactions-aks-demo/demo/publish/ .
 EXPOSE 80
 ENTRYPOINT ["dotnet", "aks-ga-demo.dll"]
 
