@@ -79,6 +79,7 @@ jobs:
       run: |
         docker login githubcipractice.azurecr.io -u ${{secrets.ACR_ID}} -p ${{secrets.ACR_PASS}}
         docker push githubcipractice.azurecr.io/demoenv:${{ github.run_id }}  
+        docker history githubcipractice.azurecr.io/demoenv:${{ github.run_id }}
         
       
   # Dotnet_Restore:
