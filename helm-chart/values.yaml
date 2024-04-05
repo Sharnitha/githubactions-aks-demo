@@ -1,0 +1,7 @@
+image:
+  repositary: githubcipractice.azurecr.io/demoenv
+  tag: ${{ github.run_id }}
+resources:
+  memory: "128Mi"
+  cpu: "500m"
+containerPort: 80

@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: githubactions-aks-demo
+spec:
+  selector:
+    matchLabels:
+      app: githubactions-aks-demo
+  template:
+    metadata:
+      labels:
+        app: githubactions-aks-demo
+    spec:
+      containers:
+      - name: githubactions-aks-demo
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        resources:
+          limits:
+            memory: {{ .Values.resources.memory }}
+            cpu: {{ .Values.resources.cpu }}
+        ports:
+        - containerPort: {{ .Values.containerPort }}
