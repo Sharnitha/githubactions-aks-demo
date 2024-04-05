@@ -5,7 +5,8 @@ on:
 
 env: 
   # DOTNET_VERSION: '3.1.426'
-  DOTNET_INSTALL_DIR: "./.dotnet"
+  DOTNET_INSTALL_DIR: "./.dotnet" # this is used in dotnet_build job.
+  # GH_TOKEN: {{ }} # if you not provide this cred means, in machine do gh auth login and authenticate first using pat.
 
 jobs:
   Dotnet_Build:
@@ -28,12 +29,24 @@ jobs:
       run: dotnet build -c release
     - name: Dotnet publish
       run: dotnet publish -c release
+      # run: dotnet publish -c release -o demo/publish --> it is not worked because this demo/publish path is vanish in docker build job.
     - name: UploadArtifact
       uses: actions/upload-artifact@v4.3.1
       with:
         name: dotnet_artifacts
         path: bin/release/netcoreapp3.1/publish/aks-ga-demo.dll
-        
+
+  # Sonarqube:
+  #   name: Sonarqube
+  #   runs-on: self-hosted
+  #   needs: Dotnet_Build
+  #   steps:
+  #   - name: SonarQube Scan
+  #     uses: sonarsource/sonarqube-scan-action@master
+  #     env:
+  #       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  #       SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
   Docker_Login:
     runs-on: self-hosted
     needs: Dotnet_Build
@@ -54,52 +67,42 @@ jobs:
         uses: actions/checkout@v4
       - name: Docker build using Dockerfile
         run: |
+          docker --version
           gh run download ${{ github.run_id }}
           docker build -t githubcipractice.azurecr.io/demoenv:${{ github.run_id }} .
-      # - name: Aqua Security Trivy
-      #   uses: aquasecurity/trivy-action@0.18.0
-      #   with:   
-      #     exit-code: 0
-      #     severity: MEDIUM,HIGH,CRITICAL
-      #     format: table
-      #     image-ref: githubcipractice.azurecr.io/demoenv:${{ github.run_id }}
-      # - name: Docker build using Dockerfile
-      #   run: docker push githubcipractice.azurecr.io/demoenv:${{ github.run_id }}  
-        
+
+  Aqua_Trivy:
+    runs-on: self-hosted
+    needs: Docker_Build
+    steps:
+      - name: Aqua Security Trivy
+        uses: aquasecurity/trivy-action@0.18.0
+        with:   
+          exit-code: 0
+          severity: MEDIUM,HIGH,CRITICAL
+          format: table
+          image-ref: githubcipractice.azurecr.io/demoenv:${{ github.run_id }}
+          
+  Aqua_Trivy_report:
+    runs-on: self-hosted
+    needs: Aqua_Trivy
+    steps:
+      - name: Aqua Trivy scan report
+        run: |
+          pwd
+          trivy image -f json -o trivyfijs.json githubcipractice.azurecr.io/demoenv:${{ github.run_id }}
+          trivy image -f table -o trivyresults.txt githubcipractice.azurecr.io/demoenv:${{ github.run_id }}
+
+  Docker_push:
+    runs-on: self-hosted
+    needs: Aqua_Trivy
+    steps:
+    - name: Docker build using Dockerfile
+      run: |
+        docker login githubcipractice.azurecr.io -u ${{secrets.ACR_ID}} -p ${{secrets.ACR_PASS}}
+        docker push githubcipractice.azurecr.io/demoenv:${{ github.run_id }}  
+        docker history githubcipractice.azurecr.io/demoenv:${{ github.run_id }}
+     # docker system prune -a 
+     # delete all all stopped containers, all networks not used by at least one container, all images without at least one container associated to them, all build cache
+       # docker image prune -a  it remove only all images without at least one container associated to them
       
-  # Dotnet_Restore:
-  #     runs-on: self-hosted
-  #     # if: contains(needs.job_1.outputs.run_next, 'true')
-  #     needs: Dotnet_Build
-  #     steps:
-  #       - name: Checkout code
-  #         uses: actions/checkout@v4
-  #       - name: Checking Dotnet version
-  #         run: dotnet --version
-  #       - name: Install Dependency
-  #         run: dotnet restore
-  #         env:
-  #             NEW_VERSION: ${{ steps.job1.outputs.new_version }}
-  # Dotnet_Build:
-  #   runs-on: self-hosted
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v4
-  #     - name: Dotnet build
-  #       run: dotnet build -c release
-  # Dotnet_Publish:
-  #   runs-on: self-hosted
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v4
-  #     - name: Dotnet build
-  #       run: dotnet publish -c release -o /app/publish
-  # Listing_Publish_Location:
-  #   runs-on: self-hosted
-  #   steps:
-  #     - name: Listing files
-  #       run: |
-  #         cd /app/publish
-  #         ls -a
-          
-          
