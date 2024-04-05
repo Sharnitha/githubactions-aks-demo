@@ -19,7 +19,7 @@ jobs:
         - uses: Azure/login@v1
           with:
             client-id: ${{ secrets.ACR_ID }}
-            tenant-id: ${{ secrets.ACR_PASS }}
+            tenant-id: ${{ secrets.TENANT_ID }}
             subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         - name: Creat resource group
           uses: azure/CLI@v1
