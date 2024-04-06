@@ -1,0 +1,101 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+on:
+  workflow_dispatch:
+   # push:
+   #  branches:
+   #  - master
+    # paths:
+    # - Controllers/**
+env:
+    GH_TOKEN: ${{secrets.ARTIFACT_TOKEN }}
+
+jobs:
+  Dotnet_Functions:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Remove Previous Dotnet Version
+      run : |
+        cd /usr/share/dotnet/
+        rm -rf *
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Setup .NET Core SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{secrets.DOTNET_VERSION}}    
+    - name: Listing Dotnet version
+      run: dotnet --version
+    - name: Restoring Dependencies
+      run: dotnet restore
+    - name: Building Dotnet
+      run: dotnet build -c release
+    - name: Dotnet Publish
+      run: dotnet publish -c release
+      # run:  dotnet publish -c release -o app/publish
+    - name: UploadArtifact
+      uses: actions/upload-artifact@v4.3.1
+      with:
+        name: dotnetdll
+        path: bin/release/netcoreapp3.1/publish/
+              
+ 
+  #   #<sonarqube>
+
+
+  Docker_Build:
+    runs-on: ubuntu-latest
+    needs: Dotnet_Functions
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Docker build using Dockerfile
+        run: |
+          gh run download ${{ github.run_id }}
+          docker build -t githubcipractice.azurecr.io/demoenv:${{ github.run_id }} .
+          
+  Aqua_Trivy:
+    runs-on: ubuntu-latest
+    needs: Docker_Build
+    steps:
+      - name: Aqua Security Trivy
+        uses: aquasecurity/trivy-action@0.18.0
+        with:   
+          exit-code: 0
+          severity: MEDIUM,HIGH,CRITICAL
+          format: table
+          image-ref: githubcipractice.azurecr.io/demoenv:${{ github.run_id }}
+          
+  Aqua_Trivy_report:
+      runs-on: ubuntu-latest
+      needs: Aqua_Trivy
+      steps:
+        - name: Aqua Trivy scan report
+          run: |
+            pwd
+            trivy image -f json -o trivyfijs.json githubcipractice.azurecr.io/demoenv:${{ github.run_id }}
+            trivy image -f table -o trivyresults.txt githubcipractice.azurecr.io/demoenv:${{ github.run_id }}
+
+   # Docker_Login:
+   #  runs-on: ubuntu-latest
+   #  needs: Install_Dotnet
+   #  steps:
+   #    - name: Docker Login to ACR
+   #      uses: docker/login-action@v3.1.0
+   #      with:
+   #        registry: githubcipractice.azurecr.io
+   #        username: ${{secrets.ACR_ID}} #Clientid
+   #        password: ${{secrets.ACR_PASS}} #Clientsecret
+   #        ecr: false
+
+  Docker_push:
+    runs-on: ubuntu-latest
+    needs: Aqua_Trivy_report
+    steps:
+    - name: Docker build using Dockerfile
+      run: |
+        docker login githubcipractice.azurecr.io -u ${{secrets.ACR_ID}} -p ${{secrets.ACR_PASS}}
+        docker push githubcipractice.azurecr.io/demoenv:${{ github.run_id }}  
+        docker history githubcipractice.azurecr.io/demoenv:${{ github.run_id }}  
+        
