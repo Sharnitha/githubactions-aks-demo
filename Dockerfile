@@ -11,6 +11,8 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
 COPY . . 
 RUN dotnet restore 
+RUN mkdir -p app/build
+RUN mkdir -p app/publish
 RUN dotnet build -c Release -o app/build
 
 FROM build AS publish
