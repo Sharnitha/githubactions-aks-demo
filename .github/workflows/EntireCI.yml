@@ -57,6 +57,8 @@ jobs:
         uses: actions/checkout@v4
       - name: Docker login & Build
         run: |
+          mkdir -p app/build
+          mkdir -p app/publish
           docker login githubcipractice.azurecr.io -u ${{secrets.ACR_ID}} -p ${{secrets.ACR_PASS}}
           # gh run download ${{ github.run_id }}
           docker build -t githubcipractice.azurecr.io/demoenv:${{ github.run_id }} .
