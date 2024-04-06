@@ -9,15 +9,12 @@
 # EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
-WORKDIR /src
-COPY ["aks-ga-demo.csproj", "."]
-RUN dotnet restore "./aks-ga-demo.csproj"
-COPY . .
-WORKDIR "/src/."
-RUN dotnet build "aks-ga-demo.csproj" -c Release -o app/build
+COPY . . 
+RUN dotnet restore 
+RUN dotnet build -c Release -o app/build
 
 FROM build AS publish
-RUN dotnet publish "aks-ga-demo.csproj" -c Release -o app/publish
+RUN dotnet publish -c Release -o app/publish
 
 FROM base AS final
 WORKDIR app
