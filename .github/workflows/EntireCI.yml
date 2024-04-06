@@ -56,9 +56,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Docker build using Dockerfile
-        run: |
-          gh run download ${{ github.run_id }}
-          docker build -t githubcipractice.azurecr.io/demoenv:${{ github.run_id }} .
+        uses: docker/login-action@v3.1.0
+        with:
+          registry: githubcipractice.azurecr.io
+          username: ${{secrets.ACR_ID}} #Clientid
+          password: ${{secrets.ACR_PASS}} #Clientsecret
+          ecr: false
+          # gh run download ${{ github.run_id }}
+          run: docker build -t githubcipractice.azurecr.io/demoenv:${{ github.run_id }} .
           
   Aqua_Trivy:
     runs-on: ubuntu-latest
