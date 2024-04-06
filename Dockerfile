@@ -13,12 +13,14 @@ COPY . .
 RUN dotnet restore 
 RUN mkdir -p app/build
 RUN mkdir -p app/publish
-RUN dotnet build -c Release -o app/build
+RUN dotnet build -c Release
 
 FROM build AS publish
-RUN dotnet publish -c Release -o app/publish
+RUN dotnet publish -c Release
+RUN pwd
+RUN ls
 
-FROM base AS final
-WORKDIR app
-COPY --from=publish app/publish .
-ENTRYPOINT ["dotnet", "aks-ga-demo.dll"]
+# FROM base AS final
+# WORKDIR app
+# COPY --from=publish app/publish .
+# ENTRYPOINT ["dotnet", "aks-ga-demo.dll"]
