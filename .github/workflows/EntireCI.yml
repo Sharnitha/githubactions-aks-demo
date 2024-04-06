@@ -3,9 +3,9 @@
 name: Full_CI
 on:
   workflow_dispatch:
-   # push:
-   #  branches:
-   #  - master
+  push:
+    branches:
+    - feature
     # paths:
     # - Controllers/**
 env:
