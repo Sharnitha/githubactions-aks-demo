@@ -3,6 +3,9 @@
 name: Full_CI
 
 on:
+  push:
+    branches:
+    - feature
   workflow_dispatch:
   
   # push:
